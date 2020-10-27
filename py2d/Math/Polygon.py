@@ -682,7 +682,10 @@ class Polygon(object):
 
 
 			# find the next notch index
-			i_extend = next( ( i for i in itertools.chain(range(i_start+1, len(p)), range(0,i_start+1)) if not point_orientation( p[i-1], p[i], p[(i+1) % len(p)] ) ) )
+			try:
+				i_extend = next( ( i for i in itertools.chain(range(i_start+1, len(p)), range(0,i_start+1)) if not point_orientation( p[i-1], p[i], p[(i+1) % len(p)] ) ) )
+			except StopIteration:
+				return False
 
 			# build provisional l
 			l = list(range(i_start,i_extend+1)) if i_start < i_extend else list(range(i_start,len(p))) + list(range(0,i_extend+1))
@@ -698,7 +701,10 @@ class Polygon(object):
 			#print "l'=%s" % l
 
 			# try to extend l counter-clockwise - find next notch
-			i_extend2 = next( ( i for i in itertools.chain((i_start,-1,-1), range(len(p)-1,i_start, -1)) if not point_orientation( p[i-1], p[i], p[(i+1) % len(p)] ) ) )
+			try:
+				i_extend2 = next( ( i for i in itertools.chain((i_start,-1,-1), range(len(p)-1,i_start, -1)) if not point_orientation( p[i-1], p[i], p[(i+1) % len(p)] ) ) )
+			except StopIteration:
+				return False
 
 			l2 =  list(range(i_extend2,len(p))) + list(range(0,i_start)) if i_extend2 > i_start else list(range(i_extend2,i_start))
 
